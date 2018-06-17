@@ -10,6 +10,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Form from "./Form"
+import RegisterEmployee from './RegisterEmployee';
 
 const TodosQuery = gql`
 {
@@ -40,7 +41,10 @@ mutation($text:String!){
  }
 `;
 
+
 class App extends Component {
+
+ 
 
   updateTodo = async todo => {
     await this.props.updateTodo({
@@ -90,50 +94,52 @@ class App extends Component {
         // Write our data back to the cache.
         store.writeQuery({ query: TodosQuery, data });
       }
-  })
-};
+    })
+  };
 
-render() {
-  const {
-    data: { loading, todos }
-  } = this.props;
-  if (loading) {
-    return null;
-  }
-  return (
-    <div style={{ display: "flex" }}>
-      <div style={{ margin: "auto", width: 400 }}>
-        <Paper elevation={1}>
-          <Form submit={this.createTodo} />
-          <List>
-            {todos.map(todo => (
-              <ListItem
-                key={todo.id}
-                role={undefined}
-                dense
-                button
-                onClick={() => this.updateTodo(todo)}
-              >
-                <Checkbox
-                  checked={todo.complete}
-                  tabIndex={-1}
-                  disableRipple
-                />
-                <ListItemText primary={todo.text} />
-                <ListItemSecondaryAction>
-                  <IconButton onClick={() => this.removeTodo(todo)}>
-                    <CloseIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-          </List>
+  render() {
+    const {
+      data: { loading, todos }
+    } = this.props;
+    if (loading) {
+      return null;
+    }
+    return (
 
-        </Paper>
+      <div style={{ display: "flex" }}>
+        <div style={{ margin: "auto", width: 400 }}>
+          <Paper elevation={1}>
+            <RegisterEmployee />
+            <Form submit={this.createTodo} />
+            <List>
+              {todos.map(todo => (
+                <ListItem
+                  key={todo.id}
+                  role={undefined}
+                  dense
+                  button
+                  onClick={() => this.updateTodo(todo)}
+                >
+                  <Checkbox
+                    checked={todo.complete}
+                    tabIndex={-1}
+                    disableRipple
+                  />
+                  <ListItemText primary={todo.text} />
+                  <ListItemSecondaryAction>
+                    <IconButton onClick={() => this.removeTodo(todo)}>
+                      <CloseIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+            </List>
+
+          </Paper>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 }
 
 export default compose(
